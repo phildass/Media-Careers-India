@@ -8,13 +8,13 @@ enabled: true
 suggestions:
   # Enable auto-completions
   auto_completions: true
-  
+
   # Enable manual trigger
   manual_trigger: true
-  
+
   # Suggestion delay (ms)
   delay: 0
-  
+
   # Max suggestions to show
   max_suggestions: 10
 
@@ -44,23 +44,23 @@ editor:
 advanced:
   # Enable workspace indexing
   workspace_indexing: true
-  
+
   # Enable semantic search
   semantic_search: true
-  
+
   # Enable symbol navigation
   symbol_navigation: true
-  
+
   # Enable cross-file context
   cross_file_context: true
-  
+
   # Enable project-wide analysis
   project_analysis: true
 
 # Copilot Chat settings
 chat:
   enabled: true
-  
+
   # Chat features
   features:
     - code_explanation
@@ -71,7 +71,7 @@ chat:
     - documentation
     - code_review
     - security_analysis
-    
+
   # Context settings
   context:
     include_workspace: true
@@ -82,7 +82,7 @@ chat:
 # Copilot for Pull Requests
 pull_requests:
   enabled: true
-  
+
   # PR features
   features:
     - summaries
@@ -94,7 +94,7 @@ pull_requests:
 # Copilot for CLI
 cli:
   enabled: true
-  
+
   # CLI features
   features:
     - command_suggestions
@@ -105,10 +105,10 @@ cli:
 security:
   # Allow code scanning
   code_scanning: true
-  
+
   # Allow vulnerability detection
   vulnerability_detection: true
-  
+
   # Allow security suggestions
   security_suggestions: true
 
@@ -116,9 +116,9 @@ security:
 performance:
   # Enable caching
   caching: true
-  
+
   # Cache duration (hours)
   cache_duration: 24
-  
+
   # Preload suggestions
   preload: true
