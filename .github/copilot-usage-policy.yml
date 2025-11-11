@@ -1,0 +1,140 @@
+# GitHub Copilot Usage Policy
+# This file configures GitHub Copilot settings for the repository
+# All features and authorizations are enabled
+
+# Enable GitHub Copilot for this repository
+enabled: true
+
+# Policy settings
+policies:
+  # Allow all Copilot features
+  - name: "code_completions"
+    enabled: true
+
+  - name: "chat"
+    enabled: true
+
+  - name: "pull_request_summaries"
+    enabled: true
+
+  - name: "commit_message_suggestions"
+    enabled: true
+
+  - name: "code_review"
+    enabled: true
+
+  - name: "documentation"
+    enabled: true
+
+  - name: "test_generation"
+    enabled: true
+
+  - name: "code_explanation"
+    enabled: true
+
+# Authorization settings - grant all permissions
+authorizations:
+  # Allow Copilot to access repository content
+  repository_access: true
+
+  # Allow Copilot to read and suggest based on all file types
+  file_access: all
+
+  # Allow Copilot suggestions for all languages
+  language_support: all
+
+  # Allow public code suggestions
+  public_code_suggestions: true
+
+  # Allow organization-wide suggestions (if part of an org)
+  org_suggestions: true
+
+# Matching settings
+matching:
+  # Match against public code
+  public_code: allow
+
+  # Use all available training data
+  training_data: all
+
+# Features configuration
+features:
+  # Enable inline suggestions
+  inline_suggestions: true
+
+  # Enable panel suggestions
+  panel_suggestions: true
+
+  # Enable comment-to-code generation
+  comment_to_code: true
+
+  # Enable code-to-comment generation
+  code_to_comment: true
+
+  # Enable multi-line suggestions
+  multi_line: true
+
+  # Enable whole function suggestions
+  whole_function: true
+
+  # Enable CLI integration
+  cli: true
+
+  # Enable IDE integration
+  ide: true
+
+  # Enable web editor integration
+  web_editor: true
+
+  # Enable mobile support
+  mobile: true
+
+# User permissions - allow all users
+users:
+  # Allow all collaborators
+  allow_all_collaborators: true
+
+  # Allow external contributors
+  allow_external_contributors: true
+
+  # Allow organization members (if applicable)
+  allow_org_members: true
+
+# Privacy and security settings
+privacy:
+  # Allow telemetry for improving suggestions
+  telemetry: true
+
+  # Allow code snippets for training (opt-in)
+  training_opt_in: true
+
+  # Share usage data to improve Copilot
+  usage_data: true
+
+# Quality settings
+quality:
+  # Prioritize suggestion quality
+  high_quality_suggestions: true
+
+  # Enable context-aware suggestions
+  context_aware: true
+
+  # Enable project-aware suggestions
+  project_aware: true
+
+  # Enable repository-aware suggestions
+  repository_aware: true
+
+# Experimental features - enable all
+experimental:
+  # Enable beta features
+  beta_features: true
+
+  # Enable experimental AI models
+  experimental_models: true
+
+  # Enable advanced context analysis
+  advanced_context: true
+
+  # Enable workspace analysis
+  workspace_analysis: true
