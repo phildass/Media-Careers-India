@@ -11,46 +11,39 @@ export interface EmailOptions {
   }>
 }
 
-export async function sendEmail(options: EmailOptions): Promise<boolean> {
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM } = process.env
+export async function sendEmail(options: EmailOptions): Promise<void> {
+  const smtpConfigured = process.env.SMTP_HOST && process.env.SMTP_USER
 
-  // If SMTP is not configured, log to console instead
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
-    console.log('📧 EMAIL (Console Mode - SMTP not configured):')
+  if (!smtpConfigured) {
+    // Log to console in development when SMTP not configured
+    console.log('📧 Email would be sent (SMTP not configured):')
     console.log('To:', options.to)
     console.log('Subject:', options.subject)
     console.log('Body:', options.text || options.html)
     if (options.attachments) {
       console.log('Attachments:', options.attachments.map(a => a.filename).join(', '))
     }
-    console.log('---')
-    return true
+    return
   }
 
-  try {
-    const transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: parseInt(SMTP_PORT || '587'),
-      secure: SMTP_PORT === '465',
-      auth: {
-        user: SMTP_USER,
-        pass: SMTP_PASS,
-      },
-    })
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_PORT === '465',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  })
 
-    await transporter.sendMail({
-      from: SMTP_FROM || SMTP_USER,
-      to: options.to,
-      subject: options.subject,
-      text: options.text,
-      html: options.html,
-      attachments: options.attachments,
-    })
+  await transporter.sendMail({
+    from: process.env.SMTP_USER,
+    to: options.to,
+    subject: options.subject,
+    text: options.text,
+    html: options.html,
+    attachments: options.attachments,
+  })
 
-    console.log('✅ Email sent successfully to:', options.to)
-    return true
-  } catch (error) {
-    console.error('❌ Error sending email:', error)
-    return false
-  }
+  console.log('✅ Email sent to:', options.to)
 }

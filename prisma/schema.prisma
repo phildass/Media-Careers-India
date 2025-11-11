@@ -22,9 +22,9 @@ model User {
 model Company {
   id          Int      @id @default(autoincrement())
   name        String
-  description String?
   website     String?
-  logo        String?
+  description String?
+  location    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   jobs        Job[]
@@ -34,32 +34,32 @@ model Job {
   id           Int           @id @default(autoincrement())
   title        String
   description  String
-  location     String
+  location     String?
   salary       String?
-  jobType      String        // full-time, part-time, contract, internship
+  jobType      String?       // full-time, part-time, contract, internship
   experience   String?
-  skills       String?       // JSON string
+  skills       String?       // comma-separated
+  postedDate   DateTime      @default(now())
+  expiryDate   DateTime?
+  isActive     Boolean       @default(true)
   companyId    Int
   company      Company       @relation(fields: [companyId], references: [id])
-  isActive     Boolean       @default(true)
-  postedDate   DateTime      @default(now())
+  applications Application[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  applications Application[]
 }
 
 model Application {
-  id           Int      @id @default(autoincrement())
-  jobId        Int
-  job          Job      @relation(fields: [jobId], references: [id])
-  name         String
-  email        String
-  phone        String?
-  resumePath   String?  // Path to stored resume file
-  coverLetter  String?
-  experience   String?
-  skills       String?  // JSON string
-  status       String   @default("pending") // pending, reviewed, shortlisted, rejected
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  jobId       Int
+  job         Job      @relation(fields: [jobId], references: [id])
+  name        String
+  email       String
+  phone       String?
+  resumePath  String?  // path to uploaded resume
+  coverLetter String?
+  appliedAt   DateTime @default(now())
+  status      String   @default("pending") // pending, reviewed, accepted, rejected
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

@@ -1,31 +1,34 @@
 import Layout from '@/components/Layout'
+import Link from 'next/link'
 import { GetServerSideProps } from 'next'
 import { prisma } from '@/lib/prisma'
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 interface Job {
   id: number
   title: string
   description: string
-  location: string
+  location: string | null
   salary: string | null
-  jobType: string
+  jobType: string | null
   experience: string | null
   skills: string | null
+  postedDate: string
   company: {
     name: string
-    description: string | null
     website: string | null
-    logo: string | null
+    description: string | null
+    location: string | null
   }
-  postedDate: string
 }
 
-interface JobDetailPageProps {
+interface JobDetailsPageProps {
   job: Job | null
 }
 
-export default function JobDetailPage({ job }: JobDetailPageProps) {
+export default function JobDetailsPage({ job }: JobDetailsPageProps) {
+  const router = useRouter()
   const [isApplying, setIsApplying] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -34,16 +37,17 @@ export default function JobDetailPage({ job }: JobDetailPageProps) {
     coverLetter: '',
   })
   const [resume, setResume] = useState<File | null>(null)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [submitting, setSubmitting] = useState(false)
 
   if (!job) {
     return (
-      <Layout title="Job Not Found">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="bg-white rounded-lg shadow p-8 text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Job Not Found</h1>
-            <p className="text-gray-600">The job you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-          </div>
+      <Layout>
+        <div className="container mx-auto px-4 py-12 text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Job Not Found</h1>
+          <p className="text-gray-600 mb-8">The job you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+          <Link href="/jobs" className="text-accent-red hover:underline">
+            Back to Jobs
+          </Link>
         </div>
       </Layout>
     )
@@ -51,8 +55,7 @@ export default function JobDetailPage({ job }: JobDetailPageProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsApplying(true)
-    setSubmitStatus('idle')
+    setSubmitting(true)
 
     try {
       const formDataToSend = new FormData()
@@ -71,84 +74,178 @@ export default function JobDetailPage({ job }: JobDetailPageProps) {
       })
 
       if (response.ok) {
-        setSubmitStatus('success')
+        alert('Application submitted successfully!')
+        setIsApplying(false)
         setFormData({ name: '', email: '', phone: '', coverLetter: '' })
         setResume(null)
       } else {
-        setSubmitStatus('error')
+        const error = await response.json()
+        alert(`Error: ${error.message || 'Failed to submit application'}`)
       }
     } catch (error) {
       console.error('Error submitting application:', error)
-      setSubmitStatus('error')
+      alert('Failed to submit application. Please try again.')
     } finally {
-      setIsApplying(false)
+      setSubmitting(false)
     }
   }
 
-  const skills = job.skills ? JSON.parse(job.skills) : []
-
   return (
-    <Layout title={job.title} description={`Apply for ${job.title} at ${job.company.name}`}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Job Details */}
-        <div className="bg-white rounded-lg shadow p-8 mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">{job.title}</h1>
-          <p className="text-xl text-lavender-600 font-medium mb-6">{job.company.name}</p>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div>
-              <p className="text-sm text-gray-500">Location</p>
-              <p className="font-medium text-gray-900">{job.location}</p>
+    <Layout>
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          {/* Job Header */}
+          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{job.title}</h1>
+            <div className="text-xl text-gray-700 mb-4">{job.company.name}</div>
+            
+            <div className="flex flex-wrap gap-4 mb-6">
+              {job.location && (
+                <span className="px-4 py-2 bg-primary-lavender rounded-full text-sm">
+                  📍 {job.location}
+                </span>
+              )}
+              {job.jobType && (
+                <span className="px-4 py-2 bg-primary-lavender rounded-full text-sm">
+                  💼 {job.jobType}
+                </span>
+              )}
+              {job.salary && (
+                <span className="px-4 py-2 bg-primary-lavender rounded-full text-sm">
+                  💰 {job.salary}
+                </span>
+              )}
+              {job.experience && (
+                <span className="px-4 py-2 bg-primary-lavender rounded-full text-sm">
+                  🎯 {job.experience}
+                </span>
+              )}
             </div>
-            <div>
-              <p className="text-sm text-gray-500">Job Type</p>
-              <p className="font-medium text-gray-900">{job.jobType}</p>
-            </div>
-            {job.salary && (
-              <div>
-                <p className="text-sm text-gray-500">Salary</p>
-                <p className="font-medium text-gray-900">{job.salary}</p>
-              </div>
-            )}
-            {job.experience && (
-              <div>
-                <p className="text-sm text-gray-500">Experience</p>
-                <p className="font-medium text-gray-900">{job.experience}</p>
-              </div>
-            )}
+
+            <button
+              onClick={() => setIsApplying(!isApplying)}
+              className="w-full md:w-auto bg-accent-red text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-accent-red-dark transition"
+            >
+              {isApplying ? 'Cancel Application' : 'Apply Now'}
+            </button>
           </div>
 
-          <div className="border-t pt-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">Job Description</h2>
-            <p className="text-gray-700 whitespace-pre-line">{job.description}</p>
+          {/* Application Form */}
+          {isApplying && (
+            <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Apply for this position</h2>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-lavender-dark"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-lavender-dark"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-lavender-dark"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Resume * (PDF, DOC, DOCX)
+                  </label>
+                  <input
+                    type="file"
+                    required
+                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => setResume(e.target.files?.[0] || null)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-lavender-dark"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Cover Letter
+                  </label>
+                  <textarea
+                    rows={6}
+                    value={formData.coverLetter}
+                    onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-lavender-dark"
+                    placeholder="Tell us why you're a great fit for this role..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full bg-accent-red text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-accent-red-dark transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? 'Submitting...' : 'Submit Application'}
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Job Description */}
+          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Job Description</h2>
+            <div className="prose max-w-none text-gray-700 whitespace-pre-line">
+              {job.description}
+            </div>
           </div>
 
-          {skills.length > 0 && (
-            <div className="border-t pt-6 mt-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">Required Skills</h2>
+          {/* Skills */}
+          {job.skills && (
+            <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Required Skills</h2>
               <div className="flex flex-wrap gap-2">
-                {skills.map((skill: string, index: number) => (
+                {job.skills.split(',').map((skill, index) => (
                   <span
                     key={index}
-                    className="bg-lavender-100 text-lavender-700 px-3 py-1 rounded-full text-sm"
+                    className="px-4 py-2 bg-primary-lavender text-gray-800 rounded-full text-sm"
                   >
-                    {skill}
+                    {skill.trim()}
                   </span>
                 ))}
               </div>
             </div>
           )}
 
+          {/* Company Info */}
           {job.company.description && (
-            <div className="border-t pt-6 mt-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">About {job.company.name}</h2>
-              <p className="text-gray-700">{job.company.description}</p>
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">About {job.company.name}</h2>
+              <p className="text-gray-700 mb-4">{job.company.description}</p>
               {job.company.website && (
                 <a
                   href={job.company.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-lavender-600 hover:text-lavender-700 mt-2 inline-block"
+                  className="text-accent-red hover:underline"
                 >
                   Visit Website →
                 </a>
@@ -156,114 +253,19 @@ export default function JobDetailPage({ job }: JobDetailPageProps) {
             </div>
           )}
         </div>
-
-        {/* Application Form */}
-        <div className="bg-white rounded-lg shadow p-8">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900">Apply for this Position</h2>
-          
-          {submitStatus === 'success' && (
-            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-              Application submitted successfully! We&apos;ll get back to you soon.
-            </div>
-          )}
-
-          {submitStatus === 'error' && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-              Failed to submit application. Please try again.
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name *
-              </label>
-              <input
-                type="text"
-                id="name"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email *
-              </label>
-              <input
-                type="email"
-                id="email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number *
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                required
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="resume" className="block text-sm font-medium text-gray-700 mb-2">
-                Resume (PDF or DOC) *
-              </label>
-              <input
-                type="file"
-                id="resume"
-                required
-                accept=".pdf,.doc,.docx"
-                onChange={(e) => setResume(e.target.files?.[0] || null)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="coverLetter" className="block text-sm font-medium text-gray-700 mb-2">
-                Cover Letter
-              </label>
-              <textarea
-                id="coverLetter"
-                rows={6}
-                value={formData.coverLetter}
-                onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-transparent"
-                placeholder="Tell us why you&apos;re a great fit for this role..."
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isApplying}
-              className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isApplying ? 'Submitting...' : 'Submit Application'}
-            </button>
-          </form>
-        </div>
       </div>
     </Layout>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.params!
+  const { id } = context.params as { id: string }
 
   try {
     const job = await prisma.job.findUnique({
-      where: { id: parseInt(id as string) },
+      where: {
+        id: parseInt(id),
+      },
       include: {
         company: true,
       },
@@ -279,7 +281,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
       props: {
-        job: JSON.parse(JSON.stringify(job)),
+        job: {
+          ...job,
+          postedDate: job.postedDate.toISOString(),
+          createdAt: job.createdAt.toISOString(),
+          updatedAt: job.updatedAt.toISOString(),
+          expiryDate: job.expiryDate?.toISOString() || null,
+        },
       },
     }
   } catch (error) {

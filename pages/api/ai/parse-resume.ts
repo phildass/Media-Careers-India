@@ -1,76 +1,82 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-/**
- * TODO: Implement AI-powered resume parsing
- * 
- * This endpoint will:
- * - Accept resume file (PDF, DOC, DOCX) or text
- * - Use AI (OpenAI GPT, etc.) to extract structured data
- * - Return parsed information (name, email, phone, skills, experience, education)
- * 
- * Integration options:
- * - OpenAI API for GPT-based parsing
- * - Anthropic Claude API
- * - Custom ML model
- * 
- * Implementation steps:
- * 1. Accept resume file upload or text
- * 2. Extract text from PDF/DOC if needed (use pdf-parse or similar)
- * 3. Send to AI API with structured prompt
- * 4. Parse AI response into structured JSON
- * 5. Return parsed data
- * 
- * Example OpenAI integration:
- * ```
- * import OpenAI from 'openai'
- * const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
- * const response = await openai.chat.completions.create({
- *   model: 'gpt-4',
- *   messages: [{ role: 'user', content: `Parse this resume: ${resumeText}` }]
- * })
- * ```
- */
+// TODO: Integrate with OpenAI or other AI provider
+// This endpoint will parse resumes and extract structured information
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' })
+    return res.status(405).json({ message: 'Method not allowed' })
   }
 
-  // Mock response for now
-  const mockParsedResume = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '+91 98765 43210',
-    skills: ['JavaScript', 'React', 'Node.js', 'Journalism', 'Content Writing'],
-    experience: [
-      {
-        title: 'Content Writer',
-        company: 'Media Company XYZ',
-        duration: '2021-2023',
-        description: 'Created engaging content for digital platforms',
-      },
-    ],
-    education: [
-      {
-        degree: 'Bachelor of Journalism',
-        institution: 'University of Delhi',
-        year: '2020',
-      },
-    ],
-    totalExperience: '2 years',
-    eligibleForFreeMembership: false, // Less than 1 year = true
-  }
+  try {
+    const { resumeText, resumeUrl } = req.body
 
-  return res.status(200).json({
-    success: true,
-    data: mockParsedResume,
-    message: 'This is a mock response. AI integration pending.',
-    todo: [
-      'Integrate OpenAI API or similar AI service',
-      'Add resume file parsing (PDF, DOC)',
-      'Implement structured data extraction',
-      'Add validation and error handling',
-      'Store parsed data in database if needed',
-    ],
-  })
+    if (!resumeText && !resumeUrl) {
+      return res.status(400).json({ 
+        message: 'Either resumeText or resumeUrl is required' 
+      })
+    }
+
+    // TODO: Implement AI-powered resume parsing
+    // 1. Extract text from resume (PDF/DOC)
+    // 2. Send to AI service (OpenAI, Google AI, etc.)
+    // 3. Parse and structure the information
+    // 4. Return structured data
+
+    // Mock response for now
+    const mockParsedData = {
+      name: 'Sample Name',
+      email: 'sample@example.com',
+      phone: '+91-9999999999',
+      experience: {
+        totalYears: 2,
+        positions: [
+          {
+            title: 'Content Writer',
+            company: 'Media Company',
+            duration: '2 years',
+            description: 'Created engaging content for various platforms',
+          },
+        ],
+      },
+      education: [
+        {
+          degree: 'Bachelor of Arts in Journalism',
+          institution: 'University Name',
+          year: 2022,
+        },
+      ],
+      skills: [
+        'Content Writing',
+        'SEO',
+        'Social Media',
+        'Video Editing',
+      ],
+      summary: 'Experienced content writer with 2 years in media industry',
+      eligibleForFreeMembership: false, // Based on experience < 1 year
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: mockParsedData,
+      message: 'Resume parsed successfully (mock data)',
+      placeholder: true,
+      todo: [
+        'Integrate AI provider (OpenAI API)',
+        'Implement PDF/DOC text extraction',
+        'Design prompt for structured extraction',
+        'Add validation and error handling',
+        'Store parsed data for user verification',
+      ],
+    })
+  } catch (error) {
+    console.error('Resume parsing error:', error)
+    return res.status(500).json({ 
+      message: 'Failed to parse resume',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    })
+  }
 }

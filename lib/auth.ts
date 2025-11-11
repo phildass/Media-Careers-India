@@ -1,23 +1,45 @@
-import { SessionOptions } from 'iron-session'
+import { serialize, parse } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { IncomingMessage } from 'http'
 
-export interface SessionData {
-  isLoggedIn: boolean
-  username?: string
-}
+const TOKEN_NAME = 'admin_session'
+const MAX_AGE = 60 * 60 * 8 // 8 hours
 
-export const sessionOptions: SessionOptions = {
-  password: process.env.SESSION_SECRET || 'complex_password_at_least_32_characters_long_for_security',
-  cookieName: 'mediacareers_session',
-  cookieOptions: {
-    secure: process.env.NODE_ENV === 'production',
+export function setAuthCookie(res: NextApiResponse, token: string) {
+  const cookie = serialize(TOKEN_NAME, token, {
+    maxAge: MAX_AGE,
+    expires: new Date(Date.now() + MAX_AGE * 1000),
     httpOnly: true,
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-  },
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+    sameSite: 'lax',
+  })
+
+  res.setHeader('Set-Cookie', cookie)
 }
 
-export async function checkAuth(req: NextApiRequest, res: NextApiResponse): Promise<boolean> {
-  const { getIronSession } = await import('iron-session')
-  const session = await getIronSession<SessionData>(req, res, sessionOptions)
-  return session.isLoggedIn === true
+export function removeAuthCookie(res: NextApiResponse) {
+  const cookie = serialize(TOKEN_NAME, '', {
+    maxAge: -1,
+    path: '/',
+  })
+
+  res.setHeader('Set-Cookie', cookie)
+}
+
+export function getAuthCookie(req: NextApiRequest | IncomingMessage): string | undefined {
+  const cookies = parse(req.headers.cookie || '')
+  return cookies[TOKEN_NAME]
+}
+
+export function validateAdmin(username: string, password: string): boolean {
+  const adminUser = process.env.ADMIN_USER || 'admin'
+  const adminPass = process.env.ADMIN_PASS || 'changeme'
+  
+  return username === adminUser && password === adminPass
+}
+
+export function isAuthenticated(req: NextApiRequest | IncomingMessage): boolean {
+  const token = getAuthCookie(req)
+  return token === 'authenticated'
 }

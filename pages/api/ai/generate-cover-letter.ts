@@ -1,71 +1,66 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-/**
- * TODO: Implement AI-powered cover letter generation
- * 
- * This endpoint will:
- * - Accept job details and applicant information
- * - Use AI (OpenAI GPT, etc.) to generate a personalized cover letter
- * - Return the generated cover letter text
- * 
- * Input parameters:
- * - jobTitle: string
- * - jobDescription: string
- * - companyName: string
- * - applicantName: string
- * - applicantExperience: string (resume summary or key highlights)
- * - tone: 'professional' | 'creative' | 'formal' (optional)
- * 
- * Implementation steps:
- * 1. Validate input parameters
- * 2. Construct prompt for AI with job and applicant details
- * 3. Call AI API (OpenAI, Claude, etc.)
- * 4. Parse and format the generated cover letter
- * 5. Return formatted text
- * 
- * Example OpenAI integration:
- * ```
- * import OpenAI from 'openai'
- * const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
- * const prompt = `Generate a cover letter for ${applicantName} applying to ${jobTitle} at ${companyName}...`
- * const response = await openai.chat.completions.create({
- *   model: 'gpt-4',
- *   messages: [{ role: 'user', content: prompt }]
- * })
- * ```
- */
+// TODO: Integrate with OpenAI or other AI provider
+// This endpoint will generate personalized cover letters
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' })
+    return res.status(405).json({ message: 'Method not allowed' })
   }
 
-  const { jobTitle, companyName, applicantName } = req.body
+  try {
+    const { jobDescription, resumeData, candidateName, jobTitle, companyName } = req.body
 
-  // Mock response for now
-  const mockCoverLetter = `Dear Hiring Manager,
+    if (!jobDescription || !candidateName) {
+      return res.status(400).json({ 
+        message: 'jobDescription and candidateName are required' 
+      })
+    }
 
-I am writing to express my strong interest in the ${jobTitle || 'position'} at ${companyName || 'your esteemed organization'}. With my background in media and communications, I am excited about the opportunity to contribute to your team.
+    // TODO: Implement AI-powered cover letter generation
+    // 1. Combine job description with candidate's resume data
+    // 2. Send to AI service with appropriate prompt
+    // 3. Generate personalized cover letter
+    // 4. Return formatted cover letter
 
-My experience in the media industry has equipped me with the skills and knowledge necessary to excel in this role. I am particularly drawn to ${companyName || 'your company'} because of its reputation for innovation and excellence in the field.
+    // Mock response for now
+    const mockCoverLetter = `
+Dear Hiring Manager,
 
-I am confident that my passion for media, combined with my professional experience, makes me an ideal candidate for this position. I would welcome the opportunity to discuss how my skills and experiences align with your needs.
+I am writing to express my strong interest in the ${jobTitle || 'position'} at ${companyName || 'your organization'}. With my background in media and content creation, I am excited about the opportunity to contribute to your team.
 
-Thank you for considering my application. I look forward to the possibility of contributing to your team.
+${resumeData ? `My experience includes ${resumeData.experience?.totalYears || 0} years in the media industry, where I have developed strong skills in content creation, storytelling, and digital media.` : 'My diverse experience in the media industry has equipped me with the skills necessary to excel in this role.'}
+
+I am particularly drawn to this opportunity because of your organization's commitment to quality journalism and innovative media solutions. I am confident that my skills and passion for media would make me a valuable addition to your team.
+
+Thank you for considering my application. I look forward to the opportunity to discuss how I can contribute to your organization's success.
 
 Sincerely,
-${applicantName || 'Your Name'}`
+${candidateName}
+    `.trim()
 
-  return res.status(200).json({
-    success: true,
-    coverLetter: mockCoverLetter,
-    message: 'This is a mock response. AI integration pending.',
-    todo: [
-      'Integrate OpenAI API or similar AI service',
-      'Add customizable tone/style options',
-      'Implement prompt engineering for better results',
-      'Add validation and error handling',
-      'Consider adding edit/regenerate functionality',
-    ],
-  })
+    return res.status(200).json({
+      success: true,
+      coverLetter: mockCoverLetter,
+      message: 'Cover letter generated successfully (mock data)',
+      placeholder: true,
+      todo: [
+        'Integrate AI provider (OpenAI API)',
+        'Design effective prompt template',
+        'Customize based on job type and seniority',
+        'Add tone and style options',
+        'Implement length and format options',
+        'Add editing and refinement features',
+      ],
+    })
+  } catch (error) {
+    console.error('Cover letter generation error:', error)
+    return res.status(500).json({ 
+      message: 'Failed to generate cover letter',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    })
+  }
 }

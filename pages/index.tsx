@@ -3,58 +3,62 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <Layout
-      title="Home"
-      description="MediaCareers.in - Your gateway to media careers across India"
-    >
+    <Layout>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-lavender-600 to-lavender-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Your Gateway to Media Careers in India
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-lavender-100">
-              Discover opportunities in journalism, broadcasting, digital media, PR, and content creation
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/jobs" className="btn-secondary">
-                Browse Jobs
-              </Link>
-              <Link href="/membership" className="btn-outline bg-white hover:bg-gray-100">
-                <span className="text-lavender-600 hover:text-lavender-700">Join as Member</span>
-              </Link>
-            </div>
+      <section className="bg-gradient-to-br from-primary-lavender via-white to-primary-lavender py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Your Gateway to{' '}
+            <span className="text-accent-red">Media Careers</span>{' '}
+            in India
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">
+            Find opportunities in journalism, broadcasting, digital media, PR, content creation, and more.
+            Connect with top media companies across India.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/jobs"
+              className="bg-accent-red text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-accent-red-dark transition shadow-lg"
+            >
+              Browse Jobs
+            </Link>
+            <Link
+              href="/membership"
+              className="bg-primary-lavender-dark text-white px-8 py-4 rounded-lg text-lg font-semibold hover:opacity-90 transition shadow-lg"
+            >
+              Get Premium Membership
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
-            Why MediaCareers.in?
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">
+            Why Choose MediaCareers.in?
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-6 border-2 border-primary-lavender rounded-lg hover:shadow-xl transition">
+              <div className="text-4xl mb-4">📰</div>
+              <h3 className="text-2xl font-bold mb-3 text-gray-900">Curated Jobs</h3>
+              <p className="text-gray-600">
+                Hand-picked opportunities from top media companies across journalism, broadcasting, and digital content.
+              </p>
+            </div>
+            <div className="p-6 border-2 border-primary-lavender rounded-lg hover:shadow-xl transition">
               <div className="text-4xl mb-4">🎯</div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">Curated Opportunities</h3>
+              <h3 className="text-2xl font-bold mb-3 text-gray-900">Smart Matching</h3>
               <p className="text-gray-600">
-                Hand-picked jobs from top media companies across India
+                Our AI-powered resume parser helps match your skills with the right opportunities in the media industry.
               </p>
             </div>
-            <div className="text-center p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+            <div className="p-6 border-2 border-primary-lavender rounded-lg hover:shadow-xl transition">
               <div className="text-4xl mb-4">💼</div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">Industry Focused</h3>
+              <h3 className="text-2xl font-bold mb-3 text-gray-900">Premium Support</h3>
               <p className="text-gray-600">
-                Specializing in journalism, broadcasting, digital media, and PR
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="text-4xl mb-4">🚀</div>
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">Career Growth</h3>
-              <p className="text-gray-600">
-                Resources, guides, and community support for your career journey
+                Get access to premium features, career guidance, and early job alerts for just ₹199 for 3 months.
               </p>
             </div>
           </div>
@@ -62,20 +66,18 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4 text-gray-900">Ready to Start?</h2>
-          <p className="text-xl text-gray-600 mb-8">
-            Join MediaCareers.in today and take the next step in your media career
+      <section className="bg-gradient-to-r from-primary-lavender-dark to-accent-red py-16 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold mb-6">Ready to Start Your Media Career?</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            Join thousands of media professionals who have found their dream jobs through MediaCareers.in
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/jobs" className="btn-primary">
-              Explore Jobs
-            </Link>
-            <Link href="/membership" className="btn-secondary">
-              Become a Member
-            </Link>
-          </div>
+          <Link
+            href="/jobs"
+            className="bg-white text-accent-red px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition inline-block shadow-lg"
+          >
+            Explore Opportunities
+          </Link>
         </div>
       </section>
     </Layout>

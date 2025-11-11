@@ -1,49 +1,48 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { isAuthenticated } from '@/lib/auth'
 
-/**
- * TODO: Implement job scraping functionality
- * 
- * This endpoint will be responsible for:
- * - Scraping job listings from various sources (job boards, company websites, etc.)
- * - Parsing job data (title, description, location, salary, etc.)
- * - Storing scraped jobs in the database via Prisma
- * - Deduplicating jobs to avoid duplicates
- * 
- * Implementation notes:
- * - Use a scraping library like Puppeteer or Cheerio
- * - Add rate limiting to avoid overwhelming source websites
- * - Store source URL and last scraped date for tracking
- * - Consider running as a scheduled background job (cron)
- * 
- * Example flow:
- * 1. Fetch HTML from target website
- * 2. Parse job listings using CSS selectors
- * 3. Extract job details
- * 4. Check if job already exists in DB
- * 5. Create new job record if unique
- * 6. Associate with company (create company if doesn't exist)
- */
+// TODO: Implement web scraping functionality
+// This endpoint will scrape job listings from various media company websites
+// and store them in the database for review by admins
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' })
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  // Require admin authentication
+  if (!isAuthenticated(req)) {
+    return res.status(401).json({ message: 'Unauthorized' })
   }
 
-  // TODO: Add authentication check - only admins should trigger scraping
-  // const isAuthenticated = await checkAuth(req, res)
-  // if (!isAuthenticated) {
-  //   return res.status(401).json({ error: 'Unauthorized' })
-  // }
+  if (req.method !== 'GET') {
+    return res.status(405).json({ message: 'Method not allowed' })
+  }
 
-  return res.status(200).json({
-    message: 'Scraping endpoint placeholder',
-    status: 'not_implemented',
-    todo: [
-      'Implement web scraping logic',
-      'Add authentication',
-      'Store scraped jobs in database',
-      'Add deduplication logic',
-      'Consider scheduled background jobs',
-    ],
-  })
+  try {
+    // TODO: Implement scraping logic here
+    // 1. Define target websites (media companies, job boards)
+    // 2. Use puppeteer or cheerio to scrape job listings
+    // 3. Parse job details (title, description, location, etc.)
+    // 4. Store in database as draft jobs for admin review
+    // 5. Return summary of scraped jobs
+
+    return res.status(200).json({
+      message: 'Scraping functionality not yet implemented',
+      todo: [
+        'Set up web scraping library (puppeteer/cheerio)',
+        'Define target websites',
+        'Implement scraping logic',
+        'Add data parsing and validation',
+        'Store scraped data in database',
+        'Add scheduling for automatic scraping',
+      ],
+      placeholder: true,
+    })
+  } catch (error) {
+    console.error('Scraping error:', error)
+    return res.status(500).json({ 
+      message: 'Scraping failed',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    })
+  }
 }

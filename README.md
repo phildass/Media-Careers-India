@@ -1,32 +1,32 @@
-# MediaCareers.in
+# MediaCareers.in - Your Gateway to Media Jobs in India
 
-A full-stack Next.js web application connecting media professionals with career opportunities across India. Built with TypeScript, Tailwind CSS, and Prisma.
+A full-stack Next.js web application connecting media professionals with opportunities across journalism, broadcasting, digital media, PR, and content creation in India.
 
 ## 🚀 Features
 
-- **Public Job Listings**: Browse and search media career opportunities
-- **Job Applications**: Apply directly with resume uploads and cover letters
-- **Admin Dashboard**: Manage job postings and review applications
-- **Email Notifications**: Automated application notifications (configurable SMTP)
-- **Premium Membership**: Subscribe for exclusive benefits and features
+- **Public Job Listings**: Browse curated media job opportunities
+- **Job Applications**: Apply directly with resume upload
+- **Admin Dashboard**: Manage jobs and applications
+- **Premium Membership**: ₹199 for 3 months with exclusive benefits
 - **AI Integration (Planned)**: Resume parsing and cover letter generation
-- **Job Scraping (Planned)**: Automated job discovery from multiple sources
+- **Email Notifications**: Automated application notifications
+- **Mobile Responsive**: Works seamlessly on all devices
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14 (TypeScript)
-- **Styling**: Tailwind CSS
-- **Database**: SQLite (via Prisma ORM)
-- **Authentication**: Iron Session (cookie-based)
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: SQLite with Prisma ORM
+- **File Upload**: Formidable
 - **Email**: Nodemailer
-- **File Uploads**: Formidable
+- **Authentication**: Cookie-based session (simple admin auth)
 
 ## 📋 Prerequisites
 
 - Node.js 18+ and npm
 - Git
 
-## 🏁 Getting Started
+## 🔧 Installation & Setup
 
 ### 1. Clone the repository
 
@@ -43,139 +43,166 @@ npm install
 
 ### 3. Set up environment variables
 
-Copy `.env.example` to `.env` and configure:
+Copy the example environment file and update with your values:
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your settings:
+Edit `.env` and configure:
 
 ```env
 # Database
 DATABASE_URL="file:./dev.db"
 
-# Admin credentials (change these!)
+# Admin Authentication
 ADMIN_USER="admin"
 ADMIN_PASS="your-secure-password"
 
-# SMTP Settings (optional - logs to console if not configured)
+# SMTP Configuration (optional - will log to console if not set)
 SMTP_HOST="smtp.gmail.com"
 SMTP_PORT="587"
 SMTP_USER="your-email@gmail.com"
 SMTP_PASS="your-app-password"
-SMTP_FROM="noreply@mediacareers.in"
 
-# Application email recipient
-APPLICATION_EMAIL="info@phildass.com"
+# Application Email
+APP_EMAIL="info@phildass.com"
 
-# Session secret (generate a random string)
-SESSION_SECRET="generate-a-random-32-character-string-here"
-
-# App URL
+# Next.js
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+# Session Secret
+SESSION_SECRET="change-this-to-a-random-secret-in-production"
 ```
 
 ### 4. Initialize the database
 
 ```bash
 npm run prisma:migrate
+npm run prisma:generate
 ```
 
-This will:
-- Create the SQLite database
-- Run migrations to set up tables
-- Generate Prisma Client
-
-### 5. (Optional) Seed the database
-
-You can manually add test data through the admin dashboard, or create a seed script.
-
-### 6. Start the development server
+### 5. Start the development server
 
 ```bash
 npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to see the application.
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
-## 📁 Project Structure
-
-```
-Media-Careers-India/
-├── components/         # React components (Layout, Header, Footer)
-├── lib/               # Utility functions (auth, database, email)
-├── pages/             # Next.js pages and API routes
-│   ├── api/           # API endpoints
-│   │   ├── auth/      # Authentication endpoints
-│   │   ├── ai/        # AI placeholders (resume parsing, cover letters)
-│   │   ├── apply.ts   # Job application endpoint
-│   │   └── scrape.ts  # Scraping placeholder
-│   ├── admin/         # Admin dashboard
-│   ├── jobs/          # Job listings and details
-│   ├── index.tsx      # Landing page
-│   ├── membership.tsx # Membership information
-│   └── privacy.tsx    # Privacy policy
-├── prisma/            # Database schema and migrations
-├── public/            # Static files and uploads
-├── styles/            # Global CSS styles
-└── .env.example       # Environment variables template
-```
-
-## 🔑 Admin Access
-
-1. Navigate to [http://localhost:3000/admin/login](http://localhost:3000/admin/login)
-2. Use credentials from your `.env` file (default: admin/changeme123)
-3. Access the dashboard to manage jobs and view applications
-
-## 📧 Email Configuration
-
-### Development Mode (Default)
-If SMTP is not configured, emails are logged to the console instead of being sent.
-
-### Production Mode
-Configure SMTP settings in `.env`:
-- For Gmail: Use App Passwords (not your regular password)
-- For other providers: Use their SMTP settings
-
-## 🔐 Security Notes
-
-- **Never commit `.env` file** - it contains sensitive credentials
-- **Change default admin password** before deployment
-- **Use environment variables** for all secrets
-- Session cookies are HTTP-only and secure in production
-- File uploads are stored in `public/uploads/` (add size limits as needed)
-
-## 📝 Available Scripts
+## 📦 Available Scripts
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
 - `npm run prisma:migrate` - Run database migrations
-- `npm run prisma:generate` - Generate Prisma Client
+- `npm run prisma:generate` - Generate Prisma client
 - `npm run prisma:studio` - Open Prisma Studio (database GUI)
+
+## 🗂️ Project Structure
+
+```
+├── pages/
+│   ├── index.tsx              # Landing page
+│   ├── jobs/
+│   │   ├── index.tsx          # Jobs listing
+│   │   └── [id].tsx           # Job details & application
+│   ├── admin/
+│   │   ├── login.tsx          # Admin login
+│   │   └── index.tsx          # Admin dashboard
+│   ├── membership.tsx         # Premium membership info
+│   ├── privacy.tsx            # Privacy policy
+│   └── api/
+│       ├── auth/              # Authentication endpoints
+│       ├── apply.ts           # Job application endpoint
+│       ├── scrape.ts          # Scraping placeholder
+│       └── ai/                # AI endpoints (placeholders)
+├── components/
+│   └── Layout.tsx             # Main layout component
+├── lib/
+│   ├── prisma.ts              # Prisma client
+│   ├── auth.ts                # Authentication utilities
+│   └── email.ts               # Email utilities
+├── prisma/
+│   └── schema.prisma          # Database schema
+└── styles/
+    └── globals.css            # Global styles
+```
+
+## 🔐 Admin Access
+
+1. Navigate to `/admin/login`
+2. Use credentials from your `.env` file:
+   - Username: Value of `ADMIN_USER`
+   - Password: Value of `ADMIN_PASS`
+
+## 📧 Email Configuration
+
+### Development (No SMTP)
+Leave SMTP variables empty in `.env` - emails will be logged to console
+
+### Production (With SMTP)
+Configure SMTP settings in `.env`:
+- For Gmail: Use App Passwords (not your regular password)
+- For other providers: Use their SMTP settings
+
+## 🗄️ Database Management
+
+### View/Edit Data
+```bash
+npm run prisma:studio
+```
+
+### Reset Database
+```bash
+rm prisma/dev.db
+npm run prisma:migrate
+```
+
+### Add Seed Data (Optional)
+Create `prisma/seed.ts` with sample jobs and companies, then run:
+```bash
+npx tsx prisma/seed.ts
+```
 
 ## 🧪 Testing
 
-Manual testing instructions:
+### Manual Testing Checklist
+- [ ] Landing page loads with proper branding
+- [ ] Jobs listing page displays (empty or with data)
+- [ ] Job details page loads
+- [ ] Job application form submits successfully
+- [ ] Admin login works with correct credentials
+- [ ] Admin dashboard is protected (requires login)
+- [ ] Membership and Privacy pages load
+- [ ] Email notifications (check console in dev mode)
 
-1. **Landing Page**: Visit `/` and verify branding/CTAs
-2. **Job Listings**: Check `/jobs` for job list
-3. **Job Application**: Apply to a job and verify email/database
-4. **Admin Login**: Test authentication at `/admin/login`
-5. **Admin Dashboard**: View jobs and applications
+## 🔮 Planned Features (TODO)
 
-## 🔮 Planned Features
+### High Priority
+- [ ] Full admin CRUD for jobs and companies
+- [ ] Application status management
+- [ ] Resume file viewer in admin panel
+- [ ] UPI payment QR code upload
+- [ ] Member account system
 
-- [ ] AI-powered resume parsing (OpenAI integration)
-- [ ] AI cover letter generation
-- [ ] Automated job scraping from multiple sources
-- [ ] UPI payment integration for membership
-- [ ] User profiles and saved jobs
-- [ ] Advanced job search and filters
-- [ ] Email newsletters
-- [ ] Mobile app
+### AI Integration
+- [ ] OpenAI integration for resume parsing
+- [ ] Cover letter generation
+- [ ] Automatic eligibility detection for free membership
+
+### Automation
+- [ ] Job scraping from media company websites
+- [ ] Scheduled email digests
+- [ ] Automatic job expiry handling
+
+### Enhanced Features
+- [ ] Job search and filtering
+- [ ] Saved jobs for users
+- [ ] Application tracking for candidates
+- [ ] Company profiles
+- [ ] Analytics dashboard
 
 ## 🤝 Contributing
 
@@ -185,10 +212,16 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
-## 📧 Contact
+## 📞 Support
 
 For questions or support, contact: info@phildass.com
 
+## 🎨 Branding
+
+- Primary: Lavender (#E6E6FA, #9370DB)
+- Accent: Red (#DC143C, #B22222)
+- Neutral: Black, White, Grays
+
 ---
 
-Built with ❤️ for the Indian media community
+**Note**: This is an MVP scaffold. Many features are placeholders and require full implementation. Refer to TODO comments in the code for specific areas needing development.
