@@ -1,0 +1,124 @@
+# Copilot Configuration
+# Repository-level settings for GitHub Copilot
+
+# Enable Copilot
+enabled: true
+
+# Suggestion settings
+suggestions:
+  # Enable auto-completions
+  auto_completions: true
+  
+  # Enable manual trigger
+  manual_trigger: true
+  
+  # Suggestion delay (ms)
+  delay: 0
+  
+  # Max suggestions to show
+  max_suggestions: 10
+
+# Language support - enable all
+languages:
+  - "*"  # All languages
+
+# File patterns - enable for all files
+include:
+  - "**/*"
+
+# No exclusions - allow Copilot everywhere
+exclude: []
+
+# Editor settings
+editor:
+  # Enable in all editors
+  vscode: true
+  jetbrains: true
+  neovim: true
+  vim: true
+  emacs: true
+  visual_studio: true
+  web: true
+
+# Advanced features
+advanced:
+  # Enable workspace indexing
+  workspace_indexing: true
+  
+  # Enable semantic search
+  semantic_search: true
+  
+  # Enable symbol navigation
+  symbol_navigation: true
+  
+  # Enable cross-file context
+  cross_file_context: true
+  
+  # Enable project-wide analysis
+  project_analysis: true
+
+# Copilot Chat settings
+chat:
+  enabled: true
+  
+  # Chat features
+  features:
+    - code_explanation
+    - code_generation
+    - code_refactoring
+    - bug_detection
+    - test_generation
+    - documentation
+    - code_review
+    - security_analysis
+    
+  # Context settings
+  context:
+    include_workspace: true
+    include_git_history: true
+    include_open_files: true
+    include_symbols: true
+
+# Copilot for Pull Requests
+pull_requests:
+  enabled: true
+  
+  # PR features
+  features:
+    - summaries
+    - review_suggestions
+    - code_analysis
+    - test_suggestions
+    - documentation_updates
+
+# Copilot for CLI
+cli:
+  enabled: true
+  
+  # CLI features
+  features:
+    - command_suggestions
+    - script_generation
+    - error_explanation
+
+# Security
+security:
+  # Allow code scanning
+  code_scanning: true
+  
+  # Allow vulnerability detection
+  vulnerability_detection: true
+  
+  # Allow security suggestions
+  security_suggestions: true
+
+# Performance
+performance:
+  # Enable caching
+  caching: true
+  
+  # Cache duration (hours)
+  cache_duration: 24
+  
+  # Preload suggestions
+  preload: true
