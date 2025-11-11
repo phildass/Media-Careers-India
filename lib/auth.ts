@@ -1,5 +1,6 @@
 import { serialize, parse } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { IncomingMessage } from 'http'
 
 const TOKEN_NAME = 'admin_session'
 const MAX_AGE = 60 * 60 * 8 // 8 hours
@@ -26,7 +27,7 @@ export function removeAuthCookie(res: NextApiResponse) {
   res.setHeader('Set-Cookie', cookie)
 }
 
-export function getAuthCookie(req: NextApiRequest): string | undefined {
+export function getAuthCookie(req: NextApiRequest | IncomingMessage): string | undefined {
   const cookies = parse(req.headers.cookie || '')
   return cookies[TOKEN_NAME]
 }
@@ -38,7 +39,7 @@ export function validateAdmin(username: string, password: string): boolean {
   return username === adminUser && password === adminPass
 }
 
-export function isAuthenticated(req: NextApiRequest): boolean {
+export function isAuthenticated(req: NextApiRequest | IncomingMessage): boolean {
   const token = getAuthCookie(req)
   return token === 'authenticated'
 }

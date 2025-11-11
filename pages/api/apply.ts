@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import formidable, { File } from 'formidable'
+import formidable, { File, Fields, Files } from 'formidable'
 import { prisma } from '@/lib/prisma'
 import { sendEmail } from '@/lib/email'
 import fs from 'fs'
@@ -16,18 +16,6 @@ const uploadDir = path.join(process.cwd(), 'uploads', 'resumes')
 // Ensure upload directory exists
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true })
-}
-
-interface FormFields {
-  jobId: string[]
-  name: string[]
-  email: string[]
-  phone?: string[]
-  coverLetter?: string[]
-}
-
-interface FormFiles {
-  resume?: File | File[]
 }
 
 export default async function handler(
@@ -53,20 +41,26 @@ export default async function handler(
       },
     })
 
-    const [fields, files] = await new Promise<[FormFields, FormFiles]>(
+    const [fields, files] = await new Promise<[Fields, Files]>(
       (resolve, reject) => {
         form.parse(req, (err, fields, files) => {
           if (err) reject(err)
-          resolve([fields as FormFields, files as FormFiles])
+          resolve([fields, files])
         })
       }
     )
 
-    const jobId = parseInt(fields.jobId[0])
-    const name = fields.name[0]
-    const email = fields.email[0]
-    const phone = fields.phone?.[0] || ''
-    const coverLetter = fields.coverLetter?.[0] || ''
+    // Helper to get field value
+    const getField = (field: any): string => {
+      if (Array.isArray(field)) return field[0] || ''
+      return field || ''
+    }
+
+    const jobId = parseInt(getField(fields.jobId))
+    const name = getField(fields.name)
+    const email = getField(fields.email)
+    const phone = getField(fields.phone)
+    const coverLetter = getField(fields.coverLetter)
 
     if (!jobId || !name || !email) {
       return res.status(400).json({ 

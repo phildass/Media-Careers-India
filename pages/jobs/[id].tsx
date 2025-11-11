@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout'
+import Link from 'next/link'
 import { GetServerSideProps } from 'next'
 import { prisma } from '@/lib/prisma'
 import { useState } from 'react'
@@ -43,10 +44,10 @@ export default function JobDetailsPage({ job }: JobDetailsPageProps) {
       <Layout>
         <div className="container mx-auto px-4 py-12 text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Job Not Found</h1>
-          <p className="text-gray-600 mb-8">The job you're looking for doesn't exist or has been removed.</p>
-          <a href="/jobs" className="text-accent-red hover:underline">
+          <p className="text-gray-600 mb-8">The job you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+          <Link href="/jobs" className="text-accent-red hover:underline">
             Back to Jobs
-          </a>
+          </Link>
         </div>
       </Layout>
     )

@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Introduction</h2>
               <p>
-                MediaCareers.in ("we", "our", or "us") is committed to protecting your privacy. 
+                MediaCareers.in (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to protecting your privacy. 
                 This Privacy Policy explains how we collect, use, disclose, and safeguard your 
                 information when you use our website and services.
               </p>
@@ -93,7 +93,7 @@ export default function PrivacyPolicy() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Children's Privacy</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Children&apos;s Privacy</h2>
               <p>
                 Our services are not intended for individuals under 18 years of age. We do not 
                 knowingly collect personal information from children.
@@ -105,7 +105,7 @@ export default function PrivacyPolicy() {
               <p>
                 We may update this Privacy Policy from time to time. We will notify you of any 
                 significant changes by posting the new policy on this page and updating the 
-                "Last Updated" date.
+                &quot;Last Updated&quot; date.
               </p>
             </section>
 

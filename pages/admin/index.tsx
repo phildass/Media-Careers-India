@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next'
 import { isAuthenticated } from '@/lib/auth'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -20,9 +21,9 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
             <div className="flex gap-4">
-              <a href="/" className="hover:opacity-80 transition">
+              <Link href="/" className="hover:opacity-80 transition">
                 View Site
-              </a>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="hover:opacity-80 transition"

@@ -27,7 +27,7 @@ export default function Membership() {
                 <span className="text-2xl">✓</span>
                 <div>
                   <strong className="text-gray-900">Early Job Alerts</strong>
-                  <p className="text-gray-600">Get notified about new opportunities before they're public</p>
+                  <p className="text-gray-600">Get notified about new opportunities before they&apos;re public</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -107,7 +107,7 @@ export default function Membership() {
                 <h3 className="text-xl font-semibold text-gray-800 mb-3">Step 3: Account Activation</h3>
                 <p className="text-gray-700">
                   Your premium membership will be activated within 24 hours of payment verification. 
-                  You'll receive a confirmation email with access instructions.
+                  You&apos;ll receive a confirmation email with access instructions.
                 </p>
               </div>
             </div>
@@ -150,7 +150,7 @@ export default function Membership() {
                 <ol className="list-decimal list-inside space-y-2 ml-4">
                   <li>Upload your resume when applying for jobs</li>
                   <li>Our AI system will automatically analyze your experience level</li>
-                  <li>If eligible, you'll receive free premium access for 3 months</li>
+                  <li>If eligible, you&apos;ll receive free premium access for 3 months</li>
                   <li>Manual verification may be required in some cases</li>
                 </ol>
               </div>
@@ -158,7 +158,7 @@ export default function Membership() {
               <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-blue-800">
                   <strong>Note:</strong> Resume parsing and eligibility verification is automated. 
-                  If you believe you qualify but weren't automatically approved, please contact us at{' '}
+                  If you believe you qualify but weren&apos;t automatically approved, please contact us at{' '}
                   <a href="mailto:info@phildass.com" className="text-accent-red hover:underline">
                     info@phildass.com
                   </a>.
@@ -188,7 +188,7 @@ export default function Membership() {
                 </h3>
                 <p className="text-gray-700">
                   You can renew your membership for another 3 months at the same price. 
-                  We'll send you a reminder before your membership expires.
+                  We&apos;ll send you a reminder before your membership expires.
                 </p>
               </div>
 
@@ -211,7 +211,7 @@ export default function Membership() {
                   <a href="mailto:info@phildass.com" className="text-accent-red hover:underline">
                     info@phildass.com
                   </a>
-                  {' '}and we'll assist you within 24 hours.
+                  {' '}and we&apos;ll assist you within 24 hours.
                 </p>
               </div>
             </div>
