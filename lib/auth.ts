@@ -2,8 +2,8 @@ import { serialize, parse } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { IncomingMessage } from 'http'
 
-const TOKEN_NAME = 'admin_session'
-const MAX_AGE = 60 * 60 * 8 // 8 hours
+const TOKEN_NAME = 'mc_session'
+const MAX_AGE = 60 * 60 * 24 * 7 // 7 days
 
 export function setAuthCookie(res: NextApiResponse, token: string) {
   const cookie = serialize(TOKEN_NAME, token, {
