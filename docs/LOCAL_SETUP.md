@@ -59,4 +59,5 @@ To run the login test (interactive prompt):
 ```
 
 The script does NOT send or log secret values and is intended only for local development.
+PR test: confirm compare
 ```
