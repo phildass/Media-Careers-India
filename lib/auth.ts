@@ -21,6 +21,7 @@ export function setAuthCookie(res: NextApiResponse, token: string) {
 export function removeAuthCookie(res: NextApiResponse) {
   const cookie = serialize(TOKEN_NAME, '', {
     maxAge: -1,
+    expires: new Date(0),
     path: '/',
   })
 
