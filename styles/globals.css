@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --lavender: #a855f7;
+  --red: #ef4444;
+  --black: #000000;
+  --white: #ffffff;
+}
+
+body {
+  @apply bg-white text-gray-900;
+}
+
+.btn-primary {
+  @apply bg-lavender-600 hover:bg-lavender-700 text-white font-bold py-2 px-6 rounded-lg transition-colors;
+}
+
+.btn-secondary {
+  @apply bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition-colors;
+}
+
+.btn-outline {
+  @apply border-2 border-lavender-600 text-lavender-600 hover:bg-lavender-600 hover:text-white font-bold py-2 px-6 rounded-lg transition-colors;
+}

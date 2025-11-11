@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Company {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  website     String?
+  logo        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  jobs        Job[]
+}
+
+model Job {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  location     String
+  salary       String?
+  jobType      String        // full-time, part-time, contract, internship
+  experience   String?
+  skills       String?       // JSON string
+  companyId    Int
+  company      Company       @relation(fields: [companyId], references: [id])
+  isActive     Boolean       @default(true)
+  postedDate   DateTime      @default(now())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  applications Application[]
+}
+
+model Application {
+  id           Int      @id @default(autoincrement())
+  jobId        Int
+  job          Job      @relation(fields: [jobId], references: [id])
+  name         String
+  email        String
+  phone        String?
+  resumePath   String?  // Path to stored resume file
+  coverLetter  String?
+  experience   String?
+  skills       String?  // JSON string
+  status       String   @default("pending") // pending, reviewed, shortlisted, rejected
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
