@@ -4,10 +4,7 @@ import Link from 'next/link'
 
 export default function AdminLogin() {
   const router = useRouter()
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  })
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -19,28 +16,21 @@ export default function AdminLogin() {
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Explicitly include credentials so the browser stores the Set-Cookie header
-        // Use 'same-origin' for same-origin hosting; change to 'include' for cross-origin setups.
+        headers: { 'Content-Type': 'application/json' },
+        // keep same-origin so browser will store cookie from same origin
         credentials: 'same-origin',
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ password }),
       })
 
       if (response.ok) {
         router.push('/admin')
       } else {
         let data: any = null
-        try {
-          data = await response.json()
-        } catch (err) {
-          console.error('Failed to parse login error JSON', err)
-        }
-        setError((data && data.message) || 'Invalid credentials')
+        try { data = await response.json() } catch {}
+        setError((data && data.message) || 'Invalid password')
       }
-    } catch (error) {
-      console.error('Login error:', error)
+    } catch (err) {
+      console.error('Login error:', err)
       setError('An error occurred. Please try again.')
     } finally {
       setLoading(false)
@@ -55,35 +45,16 @@ export default function AdminLogin() {
           <p className="text-gray-600">MediaCareers.in</p>
         </div>
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-          </div>
-        )}
+        {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Username
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-lavender-dark"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Password
-            </label>
+            <label className="block text-gray-700 font-semibold mb-2">Password</label>
             <input
               type="password"
               required
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-lavender-dark"
             />
           </div>
@@ -98,9 +69,7 @@ export default function AdminLogin() {
         </form>
 
         <div className="mt-6 text-center">
-          <Link href="/" className="text-accent-red hover:underline text-sm">
-            Back to Home
-          </Link>
+          <Link href="/" className="text-accent-red hover:underline text-sm">Back to Home</Link>
         </div>
       </div>
     </div>
