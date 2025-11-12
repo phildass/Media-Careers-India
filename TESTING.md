@@ -64,12 +64,25 @@
   - Invalid credentials show error
   - Valid credentials redirect to dashboard
   - Credentials from .env work (ADMIN_USER/ADMIN_PASS)
+  - Works with both plain text and bcrypt hashed passwords
 
 - [ ] **Admin Dashboard (/admin):**
   - Redirects to login if not authenticated
   - Shows placeholder job management interface
   - Shows placeholder application management
   - "View Site" and "Logout" buttons work
+  
+- [ ] **Password Hashing:**
+  - Generate hash: `node scripts/hash-password.js testpassword`
+  - Update ADMIN_PASS in .env with the hash
+  - Restart server and login with original password
+  - Should work seamlessly
+
+- [ ] **Session Management:**
+  - Login persists across page refreshes
+  - Logout clears session
+  - Session expires after 8 hours
+  - Cannot access admin without valid session
 
 ### API Endpoints
 
