@@ -22,14 +22,22 @@ export default function AdminLogin() {
         headers: {
           'Content-Type': 'application/json',
         },
+        // Explicitly include credentials so the browser stores the Set-Cookie header
+        // Use 'same-origin' for same-origin hosting; change to 'include' for cross-origin setups.
+        credentials: 'same-origin',
         body: JSON.stringify(formData),
       })
 
       if (response.ok) {
         router.push('/admin')
       } else {
-        const data = await response.json()
-        setError(data.message || 'Invalid credentials')
+        let data: any = null
+        try {
+          data = await response.json()
+        } catch (err) {
+          console.error('Failed to parse login error JSON', err)
+        }
+        setError((data && data.message) || 'Invalid credentials')
       }
     } catch (error) {
       console.error('Login error:', error)
