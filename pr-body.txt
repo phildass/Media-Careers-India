@@ -1,0 +1,1 @@
+Align lib/auth.ts to use cookie.serialize/parse and set dev-safe options (secure=false on localhost, SameSite=Lax, httpOnly) to fix missing cookies after dependency upgrades.
