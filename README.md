@@ -58,6 +58,9 @@ DATABASE_URL="file:./dev.db"
 # Admin Authentication
 ADMIN_USER="admin"
 ADMIN_PASS="your-secure-password"
+# For production, use a hashed password (recommended):
+# Run: node scripts/hash-password.js yourpassword
+# Then use the hash: ADMIN_PASS="$2a$10$..."
 
 # SMTP Configuration (optional - will log to console if not set)
 SMTP_HOST="smtp.gmail.com"
@@ -132,10 +135,38 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ## 🔐 Admin Access
 
+### Login
+
 1. Navigate to `/admin/login`
 2. Use credentials from your `.env` file:
    - Username: Value of `ADMIN_USER`
-   - Password: Value of `ADMIN_PASS`
+   - Password: Value of `ADMIN_PASS` (can be plain text or bcrypt hash)
+
+### Security Features
+
+The admin authentication system includes:
+
+- **Secure session management**: Random session tokens with automatic expiration
+- **Password hashing support**: Use bcrypt hashed passwords for production
+- **Backward compatibility**: Plain text passwords still work for development
+- **HTTP-only cookies**: Session cookies cannot be accessed via JavaScript
+- **Automatic session cleanup**: Expired sessions are automatically removed
+
+### Generate Secure Password Hash
+
+For production, generate a bcrypt hash of your password:
+
+```bash
+node scripts/hash-password.js your-secure-password
+```
+
+Then update your `.env` file with the generated hash:
+
+```env
+ADMIN_PASS="$2a$10$abc123..."
+```
+
+The system will automatically detect and use bcrypt comparison for hashed passwords.
 
 ## 📧 Email Configuration
 

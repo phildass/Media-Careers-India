@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { validateAdmin, setAuthCookie } from '@/lib/auth'
+import { validateAdmin, setAuthCookie, createSession } from '@/lib/auth'
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,8 +16,11 @@ export default async function handler(
       return res.status(400).json({ message: 'Username and password are required' })
     }
 
-    if (validateAdmin(username, password)) {
-      setAuthCookie(res, 'authenticated')
+    const isValid = await validateAdmin(username, password)
+    
+    if (isValid) {
+      const sessionToken = createSession(username)
+      setAuthCookie(res, sessionToken)
       return res.status(200).json({ message: 'Login successful' })
     } else {
       return res.status(401).json({ message: 'Invalid credentials' })
