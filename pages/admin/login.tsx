@@ -22,14 +22,21 @@ export default function AdminLogin() {
         headers: {
           'Content-Type': 'application/json',
         },
+        // Explicitly include credentials so the browser stores the Set-Cookie header
+        credentials: 'same-origin',
         body: JSON.stringify(formData),
       })
 
       if (response.ok) {
         router.push('/admin')
       } else {
-        const data = await response.json()
-        setError(data.message || 'Invalid credentials')
+        let data = null
+        try {
+          data = await response.json()
+        } catch (err) {
+          console.error('Failed to parse login error JSON', err)
+        }
+        setError((data && data.message) || 'Invalid credentials')
       }
     } catch (error) {
       console.error('Login error:', error)
@@ -55,9 +62,7 @@ export default function AdminLogin() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Username
-            </label>
+            <label className="block text-gray-700 font-semibold mb-2">Username</label>
             <input
               type="text"
               required
@@ -68,9 +73,7 @@ export default function AdminLogin() {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Password
-            </label>
+            <label className="block text-gray-700 font-semibold mb-2">Password</label>
             <input
               type="password"
               required
@@ -90,9 +93,7 @@ export default function AdminLogin() {
         </form>
 
         <div className="mt-6 text-center">
-          <Link href="/" className="text-accent-red hover:underline text-sm">
-            Back to Home
-          </Link>
+          <Link href="/" className="text-accent-red hover:underline text-sm">Back to Home</Link>
         </div>
       </div>
     </div>
